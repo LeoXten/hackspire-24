@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #00796b;
+            border-bottom: 2px solid #00796b;
+            padding-bottom: 10px;
+        }
+
+        .form-group input, .form-group textarea {
+            border: 2px solid #b2dfdb;
+            transition: border 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #00796b;
+            box-shadow: 0px 0px 5px #00796b;
+        }
+
+        button {
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-primary:hover {
+            background-color: #004d40;
+        }
+
+        .btn-danger:hover {
+            background-color: #c62828;
+        }
+
+        .btn-warning:hover {
+            background-color: #f9a825;
+        }
+
+        .table-striped tbody tr:hover {
+            background-color: #e0f2f1;
+            transition: background-color 0.3s ease;
+        }
+
+        .table-striped {
+            border: 1px solid #b2dfdb;
+            border-radius: 8px;
+        }
+
+        form {
+            border: 1px solid #b2dfdb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #ffffff, #e0f7fa);
+        }
+
+        table {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table th {
+            background-color: #00796b;
+            color: white;
+        }
+
+        table td {
+            color: #004d40;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Doctor Dashboard</h1>
+
+        <!-- Appointment Dashboard -->
+        <div class="mt-5">
+            <h2>Today's Appointments</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Patient Name</th>
+                        <th>Disease</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody id="appointmentsTable">
+                    <!-- Data will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Update Profile -->
+        <div class="mt-5">
+            <h2>Update Profile</h2>
+            <form id="updateProfileForm">
+                <div class="form-group">
+                    <label for="profileName">Name</label>
+                    <input type="text" class="form-control" id="profileName" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileSpecialization">Specialization</label>
+                    <input type="text" class="form-control" id="profileSpecialization" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileWorkingDays">Working Days (comma separated)</label>
+                    <input type="text" class="form-control" id="profileWorkingDays" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileWorkingTimes">Working Times (comma separated)</label>
+                    <input type="text" class="form-control" id="profileWorkingTimes" required>
+                </div>
+                <div class="form-group">
+                    <label for="profileFee">Consultation Fee</label>
+                    <input type="number" class="form-control" id="profileFee" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
+        </div>
+
+        <!-- Change Hospital Request -->
+        <div class="mt-5">
+            <h2>Change Hospital Request</h2>
+            <form id="changeHospitalForm">
+                <div class="form-group">
+                    <label for="changeHospitalRequest">Request</label>
+                    <textarea class="form-control" id="changeHospitalRequest" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-danger">Send Request</button>
+            </form>
+        </div>
+
+        <!-- Patient Medical History -->
+        <div class="mt-5">
+            <h2>Patient Medical History</h2>
+            <form id="patientHistoryForm">
+                <div class="form-group">
+                    <label for="patientId">Patient ID</label>
+                    <input type="text" class="form-control" id="patientId" required>
+                </div>
+                <button type="submit" class="btn btn-primary">View History</button>
+            </form>
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Appointment ID</th>
+                        <th>Disease</th>
+                        <th>Treatment</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="patientHistoryTable">
+                    <!-- Data will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Notify System -->
+        <div class="mt-5">
+            <h2>Notify System</h2>
+            <form id="notifySystemForm">
+                <div class="form-group">
+                    <label for="notifyMessage">Message</label>
+                    <textarea class="form-control" id="notifyMessage" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-warning">Notify</button>
+            </form>
+        </div>
+
+        <!-- Delete Account -->
+        <div class="mt-5">
+            <h2>Delete Account</h2>
+            <form id="deleteAccountForm">
+                <div class="form-group">
+                    <label for="deleteAccount">Confirm Deletion</label>
+                    <input type="text" class="form-control" id="deleteAccount" required>
+                </div>
+                <button type="submit" class="btn btn-danger">Delete Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script2.js"></script>
+</body>
+</html>
